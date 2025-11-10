@@ -23,3 +23,9 @@ export function initSockets(io) {
     });
   });
 }
+import { setupOrdersNamespace } from './orders.namespace.js';
+
+export function initSockets(io) {
+  const ordersNs = io.of('/orders');
+  setupOrdersNamespace(ordersNs);
+}

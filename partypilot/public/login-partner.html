@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Partner Login – PartyPilot</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/styles/variables.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/pages/auth.css" />
+</head>
+<body>
+  <main class="auth-wrap">
+    <section class="card auth-card" role="form" aria-labelledby="title">
+      <h1 id="title">Partner Login</h1>
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input class="input" id="email" type="email" autocomplete="username" />
+      </div>
+      <div class="form-row">
+        <label for="password">Password</label>
+        <div class="flex">
+          <input class="input" id="password" type="password" autocomplete="current-password" style="flex:1" />
+          <button class="btn outline" id="togglePw" type="button" aria-pressed="false">Show</button>
+        </div>
+      </div>
+      <button id="partnerLoginBtn" class="btn" type="button">Login</button>
+      <p class="help" style="margin-top:16px;">Not a partner? <a href="/">Back to home</a></p>
+    </section>
+  </main>
+  <script src="/scripts/main.js" defer></script>
+  <script src="/scripts/pages/login-partner.js" defer></script>
+</body>
+</html>

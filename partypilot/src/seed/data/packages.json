@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Classic Birthday",
+    "slug": "classic-birthday",
+    "description": "Balloons, banner, cake table decor, basic lights",
+    "features": ["Balloons", "Banner", "Table decor", "Basic lights"],
+    "price": 3999,
+    "images": ["/assets/images/placeholder.jpg"]
+  },
+  {
+    "title": "Premium Anniversary",
+    "slug": "premium-anniversary",
+    "description": "Floral backdrop, LED initials, photo corner",
+    "features": ["Floral backdrop", "LED initials", "Photo corner"],
+    "price": 9999,
+    "images": ["/assets/images/placeholder.jpg"]
+  }
+]

@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer – PartyPilot</title>
+  <link rel="stylesheet" href="/styles/variables.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/pages/customer.css" />
+</head>
+<body>
+  <header class="nav"><div class="container nav-inner"><strong>PartyPilot / Customer</strong><a href="/" class="muted">Home</a></div></header>
+
+  <main class="container" style="padding:24px 0;">
+    <section class="card">
+      <h2>Profile</h2>
+      <form id="profileForm" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <input class="input" name="fullName" placeholder="Full name" />
+        <input class="input" name="phone" placeholder="Phone" />
+        <input class="input" name="addressLine1" placeholder="Address line 1" />
+        <input class="input" name="addressLine2" placeholder="Address line 2" />
+        <input class="input" name="city" placeholder="City" />
+        <input class="input" name="pincode" placeholder="Pincode" />
+        <button class="btn" type="submit">Save Profile</button>
+      </form>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>Packages</h2>
+      <div id="pkgGrid" class="features-grid"></div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>Cart</h2>
+      <div id="cartList" class="grid"></div>
+      <div class="flex" style="justify-content:flex-end; gap:10px; margin-top:12px;">
+        <button id="pay25" class="btn">Pay 25% & Order</button>
+        <button id="pay100" class="btn outline">Pay Full & Order</button>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>My Orders</h2>
+      <div id="orders"></div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/scripts/pages/customer.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+/* Home specific adjustments */
+.hero .cta {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-6);
+}
+.trust-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  opacity: .9;
+}
+.trust-strip .card { padding: var(--space-4); text-align: center; }

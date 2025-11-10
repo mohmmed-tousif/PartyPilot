@@ -1,0 +1,94 @@
+/* Reset-ish & base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+  background: radial-gradient(1200px 800px at 10% 0%, #0c0f23 0%, var(--bg) 60%),
+              radial-gradient(1000px 600px at 100% 0%, #1d2248 0%, transparent 60%);
+  color: var(--text);
+  font-family: var(--font-family);
+  line-height: 1.5;
+}
+html, body {
+  padding: 0;
+  margin: 0;
+  background: #0f1125;
+  background: radial-gradient(circle at top left, #1b2049 0%, #0f1125 60%) no-repeat fixed;
+  color: var(--text);
+  font-family: var(--font-family);
+  line-height: 1.5;
+}
+
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { cursor: pointer; font: inherit; }
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+/* Utility */
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.center { text-align: center; }
+.grid { display: grid; gap: var(--space-6); }
+.flex { display: flex; gap: var(--space-4); align-items: center; }
+
+.card {
+  background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: var(--space-8);
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(180deg, var(--primary), var(--primary-700));
+  color: white;
+  font-weight: 600;
+  transition: transform .15s ease, box-shadow .2s ease, opacity .2s ease;
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(0,0,0,.25); }
+.btn:active { transform: translateY(0); opacity: .9; }
+.btn.outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+/* Sticky glass nav */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(var(--blur));
+  background: color-mix(in oklab, var(--glass) 70%, transparent);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+/* Reveal animations */
+.reveal { opacity: 0; transform: translateY(16px); }
+.reveal.in { opacity: 1; transform: translateY(0); transition: opacity .6s ease, transform .6s ease; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.in { transition: none; transform: none; }
+  .btn { transition: none; }
+}

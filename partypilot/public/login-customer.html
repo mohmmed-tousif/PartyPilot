@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer Login – PartyPilot</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/styles/variables.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/pages/auth.css" />
+</head>
+<body>
+  <main class="auth-wrap">
+    <section class="card auth-card" role="form" aria-labelledby="title">
+      <h1 id="title">Customer Login (OTP)</h1>
+      <p class="muted">Enter your email or phone to receive a 6-digit code.</p>
+
+      <div class="form-row">
+        <label for="emailOrPhone">Email or phone</label>
+        <input class="input" id="emailOrPhone" type="text" autocomplete="username" aria-describedby="emailHelp" />
+        <div class="help" id="emailHelp">We’ll send a code to your email/phone.</div>
+      </div>
+      <button id="requestOtpBtn" class="btn" type="button">Request OTP</button>
+
+      <hr style="margin:24px 0; border:0; border-top:1px solid rgba(255,255,255,0.1)" />
+
+      <div id="verifyBlock" class="hidden">
+        <div class="form-row">
+          <label for="otp">Enter code</label>
+          <input class="input" id="otp" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" />
+        </div>
+        <button id="verifyOtpBtn" class="btn" type="button">Verify & Continue</button>
+      </div>
+
+      <p class="help" style="margin-top:16px;">
+        Trouble? <a href="/">Go back</a>
+      </p>
+    </section>
+  </main>
+  <script src="/scripts/main.js" defer></script>
+  <script src="/scripts/pages/login-customer.js" defer></script>
+</body>
+</html>

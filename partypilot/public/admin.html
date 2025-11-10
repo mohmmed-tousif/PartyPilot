@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin – PartyPilot</title>
+  <link rel="stylesheet" href="/styles/variables.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/pages/admin.css" />
+</head>
+<body>
+  <header class="nav"><div class="container nav-inner"><strong>PartyPilot / Admin</strong><a href="/" class="muted">Home</a></div></header>
+
+  <main class="container" style="padding:24px 0;">
+    <section class="card">
+      <h2>Revenue</h2>
+      <div id="rev"></div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>Packages</h2>
+      <form id="pkgForm" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+        <input class="input" name="title" placeholder="Title" />
+        <input class="input" name="slug" placeholder="slug" />
+        <input class="input" name="price" type="number" placeholder="price" />
+        <input class="input" name="description" placeholder="description" />
+        <button class="btn" type="submit">Create</button>
+      </form>
+      <div id="pkgList" style="margin-top:12px;"></div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>Bulletins</h2>
+      <form id="bulForm" class="flex">
+        <input class="input" name="title" placeholder="Title" />
+        <input class="input" name="message" placeholder="Message" style="flex:1" />
+        <button class="btn" type="submit">Publish</button>
+      </form>
+      <div id="buls" style="margin-top:12px;"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/scripts/pages/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Partner – PartyPilot</title>
+  <link rel="stylesheet" href="/styles/variables.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/pages/partner.css" />
+</head>
+<body>
+  <header class="nav"><div class="container nav-inner"><strong>PartyPilot / Partner</strong><a href="/" class="muted">Home</a></div></header>
+
+  <main class="container" style="padding:24px 0;">
+    <section class="card">
+      <h2>Incoming Orders</h2>
+      <div id="incoming"></div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>Update Status</h2>
+      <div class="help">Enter Order ID and set next status</div>
+      <form id="statusForm" class="flex">
+        <input class="input" name="orderId" placeholder="Order ID" />
+        <select class="input" name="status">
+          <option value="partner_reached">Partner Reached</option>
+          <option value="setup_complete">Setup Complete</option>
+          <option value="picked_up">Picked Up</option>
+        </select>
+        <button class="btn" type="submit">Update</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/scripts/pages/partner.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "info": { "name": "PartyPilot", "_postman_id": "pp-collection", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{base}}/health" } },
+    { "name": "Ping", "request": { "method": "GET", "url": "{{base}}/api/ping" } },
+    {
+      "name": "Auth - Customer Request OTP",
+      "request": { "method": "POST", "header":[{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\"emailOrPhone\":\"test@example.com\"}"},
+        "url": "{{base}}/api/auth/customer/request-otp" }
+    },
+    {
+      "name": "Auth - Customer Verify OTP",
+      "request": { "method": "POST", "header":[{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\"emailOrPhone\":\"test@example.com\",\"code\":\"123456\"}"},
+        "url": "{{base}}/api/auth/customer/verify-otp" }
+    },
+    {
+      "name": "Auth - Partner Login",
+      "request": { "method": "POST", "header":[{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\"email\":\"partner@example.com\",\"password\":\"partner123\"}"},
+        "url": "{{base}}/api/auth/partner/login" }
+    },
+    {
+      "name": "Packages - List",
+      "request": { "method": "GET", "url": "{{base}}/api/packages" }
+    },
+    {
+      "name": "Orders - Create",
+      "request": { "method": "POST", "header":[{"key":"Content-Type","value":"application/json"},{"key":"Authorization","value":"Bearer {{token}}"}],
+        "body": {"mode":"raw","raw":"{\"items\":[{\"packageId\":\"{{packageId}}\",\"qty\":1}],\"payPercent\":25}"},
+        "url": "{{base}}/api/orders" }
+    },
+    {
+      "name": "Orders - My",
+      "request": { "method": "GET", "header":[{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base}}/api/orders/my" }
+    },
+    {
+      "name": "Partner - Incoming",
+      "request": { "method": "GET", "header":[{"key":"Authorization","value":"Bearer {{partnerToken}}"}], "url": "{{base}}/api/orders/partner/incoming" }
+    },
+    {
+      "name": "Partner - Accept",
+      "request": { "method": "POST", "header":[{"key":"Authorization","value":"Bearer {{partnerToken}}"}], "url": "{{base}}/api/orders/{{orderId}}/accept" }
+    },
+    {
+      "name": "Admin - Revenue",
+      "request": { "method": "GET", "header":[{"key":"Authorization","value":"Bearer {{adminToken}}"}], "url": "{{base}}/api/admin/revenue" }
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PartyPilot – Celebrate, streamlined.</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/styles/variables.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/pages/home.css" />
+  <meta name="description" content="PartyPilot: Book packages, coordinate vendors, and manage events with real-time updates." />
+</head>
+<body>
+  <!-- Nav -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="flex">
+        <img src="/assets/logos/logo.svg" alt="PartyPilot logo" width="28" height="28" />
+        <strong>PartyPilot</strong>
+      </div>
+      <nav class="flex" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#roles">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="reveal">
+  <h1>Plan less. <span style="color:var(--accent)">Celebrate more.</span></h1>
+  <p>PartyPilot connects customers with trusted partners to set up parties end-to-end.
+     Book curated packages, pay 25% to reserve, and track progress live.</p>
+
+  <div class="cta">
+    <a class="btn" href="/login-customer.html">Login as Customer</a>
+    <a class="btn outline" href="/login-partner.html">Login as Partner</a>
+    <a class="btn outline" href="/login-admin.html">Admin</a>
+  </div>
+</div>
+
+      <div class="trust-strip grid reveal">
+        <div class="card">Fast booking</div>
+        <div class="card">Verified partners</div>
+        <div class="card">Live status</div>
+        <div class="card">Secure payments</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="reveal">Why PartyPilot?</h2>
+      <div class="features-grid">
+        <article class="card feature reveal">
+          <div class="icon" aria-hidden="true"></div>
+          <h3>Curated Packages</h3>
+          <p class="muted">Handpicked themes with clear pricing and inclusions.</p>
+        </article>
+        <article class="card feature reveal">
+          <div class="icon" aria-hidden="true"></div>
+          <h3>Reserve at 25%</h3>
+          <p class="muted">Lock your date with a small upfront payment.</p>
+        </article>
+        <article class="card feature reveal">
+          <div class="icon" aria-hidden="true"></div>
+          <h3>Real-time Updates</h3>
+          <p class="muted">Know exactly when the partner reaches and setup completes.</p>
+        </article>
+        <article class="card feature reveal">
+          <div class="icon" aria-hidden="true"></div>
+          <h3>Trusted Partners</h3>
+          <p class="muted">Reviewed vendors with consistent performance.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="container" style="padding:48px 0;">
+    <h2 class="reveal">How it works</h2>
+    <div class="timeline">
+      <div class="step card reveal"><strong>Select Package</strong><div class="muted">Pick a theme with clear inclusions.</div></div>
+      <div class="step card reveal"><strong>Pay 25%</strong><div class="muted">Secure your slot instantly.</div></div>
+      <div class="step card reveal"><strong>Partner Accepts</strong><div class="muted">Assigned vendor confirms booking.</div></div>
+      <div class="step card reveal"><strong>Setup</strong><div class="muted">Track arrival and setup completion.</div></div>
+      <div class="step card reveal"><strong>Pickup</strong><div class="muted">Mark ready & close the order.</div></div>
+    </div>
+  </section>
+
+  <!-- Roles -->
+  <section id="roles" class="container" style="padding:48px 0;">
+    <h2 class="reveal">Choose your role</h2>
+    <div class="roles">
+      <a class="role-card reveal" href="/login-customer.html" aria-label="Login as Customer">
+        <h3>Customer</h3>
+        <p class="muted">Book packages and track your order in real-time.</p>
+      </a>
+      <a class="role-card reveal" href="/login-partner.html" aria-label="Login as Partner">
+        <h3>Partner/Vendor</h3>
+        <p class="muted">Accept jobs, update statuses, and view earnings.</p>
+      </a>
+      <a class="role-card reveal" href="/login-admin.html" aria-label="Login as Admin">
+        <h3>Admin</h3>
+        <p class="muted">Manage users, packages, orders, and revenue.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container flex" style="justify-content: space-between;">
+      <div>© <span id="year"></span> PartyPilot</div>
+      <div class="flex" style="gap:16px;">
+        <a href="#">Contact</a>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/scripts/main.js" defer></script>
+  <script src="/scripts/pages/home.js" defer></script>
+</body>
+</html>

@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';

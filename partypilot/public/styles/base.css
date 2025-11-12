@@ -114,3 +114,14 @@ button { cursor: pointer; font: inherit; }
   outline: none; box-shadow: var(--ring);
 }
 .btn.small { padding: 8px 12px; font-size: 14px; border-radius: 10px; }
+
+
+/* Add to base.css or a <style> block */
+#upiModal {
+  backdrop-filter: blur(6px);
+  transition: opacity 0.2s ease;
+}
+#upiModal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

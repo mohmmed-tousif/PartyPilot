@@ -1,9 +1,17 @@
+// src/sockets/index.js
+import { Server } from 'socket.io';
 import { setupOrdersNamespace } from './orders.namespace.js';
 
-export function initSockets(io) {
-  // Create namespace for order-related real-time updates
-  const ordersNs = io.of('/orders');
+export function initSockets(server) {
+  const io = new Server(server, {
+    cors: {
+      origin: process.env.CORS_ORIGIN || '*',
+      methods: ['GET', 'POST']
+    }
+  });
 
-  // Setup user room join handling
-  setupOrdersNamespace(ordersNs);
+  // Setup namespaces
+  setupOrdersNamespace(io);
+
+  return io;
 }

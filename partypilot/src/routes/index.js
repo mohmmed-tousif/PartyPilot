@@ -9,6 +9,8 @@ import packageRoutes from './packages.routes.js';
 import profileRoutes from './profile.routes.js';
 import adminRoutes from './admin.routes.js';
 import paymentRoutes from './payments.routes.js';
+import cartRoutes from "./cart.routes.js";    
+
 
 const router = Router();
 
@@ -22,4 +24,9 @@ router.use('/orders', orderRoutes);
 router.use('/profile', profileRoutes);
 router.use('/admin', adminRoutes);
 router.use('/payments', paymentRoutes);
+router.use("/cart", cartRoutes);
+
+
+
+
 export default router;

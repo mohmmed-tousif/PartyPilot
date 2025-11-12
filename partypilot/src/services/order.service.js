@@ -6,16 +6,13 @@ import { canTransition } from '../utils/transitions.js';
 
 
 export async function createOrder(customerId, { items, payPercent }) {
-  const customer = await User.findById(customerId);
-  if (!customer || !customer.isVerified) throw new Error('Customer not verified');
-
-  const itemDetails = [];
+  const validItems = [];
   let totalAmount = 0;
 
   for (const it of items) {
     const pkg = await Package.findById(it.packageId);
-    if (!pkg) throw new Error('Invalid package');
-    itemDetails.push({ packageId: pkg._id, qty: it.qty || 1, priceAtPurchase: pkg.price });
+    if (!pkg) throw new Error("Invalid package");
+    validItems.push({ packageId: pkg._id, qty: it.qty || 1, priceAtPurchase: pkg.price });
     totalAmount += pkg.price * (it.qty || 1);
   }
 
@@ -23,16 +20,17 @@ export async function createOrder(customerId, { items, payPercent }) {
 
   const order = await Order.create({
     customerId,
-    items: itemDetails,
+    items: validItems,
     payment: {
-      mode: 'online',
+      mode: "online",
       amountPaid: payment.paidAmount,
       totalAmount,
       paidPercent: payPercent,
       status: payment.status,
-      txnRef: payment.txnRef
+      txnRef: payment.txnRef,
     },
-    statusHistory: [{ state: 'received', byRole: 'customer' }]
+    status: "received",
+    statusHistory: [{ state: "received", at: new Date(), byRole: "customer" }],
   });
 
   return order;
@@ -63,7 +61,7 @@ export async function updateOrderStatus({ orderId, nextStatus, actor }) {
 }
 
 export async function listCustomerOrders(customerId) {
-  return Order.find({ customerId }).sort({ createdAt: -1 }).populate('items.packageId');
+  return await Order.find({ customerId }).sort({ createdAt: -1 });
 }
 
 export async function listPartnerIncoming(partnerId) {

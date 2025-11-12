@@ -1,14 +1,16 @@
-import mongoose from 'mongoose';
+// src/models/OtpToken.js
+import mongoose from "mongoose";
 
-const otpTokenSchema = new mongoose.Schema(
-  {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    code: { type: String, required: true },
-    expiresAt: { type: Date, required: true }
+const otpTokenSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: false // ✅ not required at OTP request time
   },
-  { timestamps: true }
-);
+  destination: { type: String, required: true },
+  code: { type: String, required: true },
+  expiresAt: { type: Date, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
 
-otpTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-
-export default mongoose.model('OtpToken', otpTokenSchema);
+export default mongoose.model("OtpToken", otpTokenSchema);

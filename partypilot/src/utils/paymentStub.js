@@ -1,8 +1,6 @@
-export async function simulatePayment(amount, payPercent) {
-  const txnRef = 'TXN-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-  return {
-    status: 'success',
-    txnRef,
-    paidAmount: payPercent === 25 ? amount * 0.25 : amount
-  };
+
+export async function simulatePayment(totalAmount, payPercent) {
+  const paidAmount = Math.round(totalAmount * (payPercent / 100));
+  const txnRef = "MOCK-" + Date.now();
+  return { paidAmount, status: "success", txnRef };
 }

@@ -12,4 +12,10 @@ router.post('/', requireAuth, requireRole('admin'), createPackage);
 router.put('/:id', requireAuth, requireRole('admin'), updatePackage);
 router.delete('/:id', requireAuth, requireRole('admin'), deletePackage);
 
+router.get("/", async (req, res) => {
+  const packages = await Package.find({ isActive: true });
+  res.json({ ok: true, packages });
+});
+
+
 export default router;

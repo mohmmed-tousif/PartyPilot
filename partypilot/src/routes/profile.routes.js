@@ -1,9 +1,11 @@
-import { Router } from 'express';
-import { requireAuth } from '../middleware/auth.js';
-import { upsertCustomerProfile, me } from '../controllers/profile.controller.js';
+
+import { Router } from "express";
+import { requireAuth } from "../middleware/auth.js";
+import { getMe, updateCustomerProfile } from "../controllers/profile.controller.js";
 
 const router = Router();
-router.get('/me', requireAuth, me);
-router.post('/customer', requireAuth, upsertCustomerProfile);
+
+router.get("/me", requireAuth, getMe);
+router.post("/customer", requireAuth, updateCustomerProfile);
 
 export default router;

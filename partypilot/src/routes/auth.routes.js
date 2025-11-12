@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { requestCustomerOtp, verifyCustomerOtp, partnerAdminLogin } from '../controllers/auth.controller.js';
+import { requestCustomerOtp, verifyCustomerOtp/*, partnerAdminLogin */} from '../controllers/auth.controller.js';
 
 const router = Router();
 

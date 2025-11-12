@@ -51,6 +51,23 @@
     </section>
 
   </main>
+ <!-- 💳 Mock Payment Modal -->
+<div id="upiModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-[#11172b] rounded-2xl p-8 w-[90%] max-w-md shadow-2xl text-center">
+    <h2 class="text-xl font-semibold mb-4">Complete Your Payment</h2>
+    <p class="text-sm text-gray-400 mb-6">
+      Enter your UPI ID to confirm payment.
+    </p>
+    <input id="upiIdInput" type="text" placeholder="example@upi"
+           class="w-full p-3 rounded-md bg-[#1a2038] text-white mb-4 border border-gray-600 focus:border-cyan-400 outline-none">
+    <div id="upiAmountDisplay" class="text-gray-300 mb-6"></div>
+    <div class="flex justify-center gap-4">
+      <button id="upiCancel" class="btn outline px-5">Cancel</button>
+      <button id="upiConfirm" class="btn px-5 bg-cyan-500 hover:bg-cyan-600">Confirm Payment</button>
+    </div>
+  </div>
+</div>
+
 
   <script type="module" src="/socket.io/socket.io.js"></script>
   <script type="module" src="/scripts/pages/customer.js"></script>

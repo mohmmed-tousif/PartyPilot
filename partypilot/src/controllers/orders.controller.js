@@ -1,49 +1,53 @@
-import { createOrder, listCustomerOrders, listPartnerIncoming, acceptOrder } from '../services/order.service.js';
-import { updateOrderStatus } from '../services/order.service.js';
+// src/controllers/orders.controller.js
+import { createOrder, listCustomerOrders, acceptOrder } from '../services/order.service.js';
+import { emitOrderEvent } from '../sockets/orders.namespace.js';
 
-export async function createOrderController(req, res, next) {
+export async function createOrderController(req, res) {
   try {
-    const order = await createOrder(req.user.id, req.body);
+    const order = await createOrder(req.user?.id || req.user?._id, req.body);
     const io = req.app.get('io');
-    io?.of('/orders').to(`user:${req.user.id}`).emit('order:created', order);
+    emitOrderEvent(io, order, 'order:created');
     res.json({ ok: true, order });
-  } catch (err) { next(err); }
+  } catch (err) {
+    console.error('createOrderController', err);
+    res.status(500).json({ ok: false, message: err.message });
+  }
 }
 
-export async function customerOrdersController(req, res, next) {
+export async function customerOrdersController(req, res) {
   try {
-    const orders = await listCustomerOrders(req.user.id);
+    const orders = await listCustomerOrders(req.user?.id || req.user?._id);
     res.json({ ok: true, orders });
-  } catch (err) { next(err); }
+  } catch (err) {
+    console.error('customerOrdersController', err);
+    res.status(500).json({ ok: false, message: err.message });
+  }
 }
 
-export async function partnerIncomingController(req, res, next) {
+export async function acceptOrderController(req, res) {
   try {
-    const orders = await listPartnerIncoming(req.user.id);
-    res.json({ ok: true, orders });
-  } catch (err) { next(err); }
-}
-
-export async function acceptOrderController(req, res, next) {
-  try {
-    const updated = await acceptOrder(req.params.id, req.user.id);
+    const updated = await acceptOrder(req.params.id, req.user?.id || req.user?._id);
     const io = req.app.get('io');
-    io?.of('/orders').to(`user:${updated.customerId}`).emit('order:accepted', updated);
+    emitOrderEvent(io, updated, 'order:accepted');
     res.json({ ok: true, order: updated });
-  } catch (err) { next(err); }
+  } catch (err) {
+    console.error('acceptOrderController', err);
+    res.status(500).json({ ok: false, message: err.message });
+  }
 }
 
- export async function updateStatusController(req, res, next) {
-   try {
-     const updated = await updateOrderStatus({
-       orderId: req.params.id,
-       nextStatus: req.body.status,
-       actor: req.user
-     });
-     const io = req.app.get('io');
-     // notify both sides if possible
-     io?.of('/orders').to(`user:${updated.customerId}`).emit('order:statusUpdated', updated);
-     if (updated.partnerId) io?.of('/orders').to(`user:${updated.partnerId}`).emit('order:statusUpdated', updated);
-     res.json({ ok: true, order: updated });
-   } catch (err) { next(err); }
- }
+export async function cancelOrderController(req, res) {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ ok: false, message: "Order not found" });
+    if (['picked_up','cancelled'].includes(order.status))
+      return res.status(400).json({ ok: false, message: "Cannot cancel at this stage" });
+
+    order.status = 'cancelled';
+    await order.save();
+    return res.json({ ok: true, order });
+  } catch (err) {
+    console.error("cancelOrderController", err);
+    res.status(500).json({ ok: false, message: "Cancel failed" });
+  }
+}

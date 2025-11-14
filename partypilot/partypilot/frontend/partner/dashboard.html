@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Dashboard - PartyPilot</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <header class="dashboard-header container">
+        <h1>Partner Dashboard</h1>
+        <button class="btn" id="logoutBtn">Logout</button>
+    </header>
+
+    <nav class="dashboard-nav">
+        <div class="container nav-tabs">
+            <div class="nav-tab active" data-target="my-orders">My Active Orders</div>
+            <div class="nav-tab" data-target="new-orders">New Order Pool</div>
+            </div>
+    </nav>
+
+    <main class="container dashboard-content">
+        <section id="my-orders" class="content-section active">
+            <h2>My Active Orders</h2>
+            <div class="dashboard-grid" id="my-orders-grid">
+                </div>
+        </section>
+
+        <section id="new-orders" class="content-section">
+            <h2>New Available Orders</h2>
+            <div class="dashboard-grid" id="new-orders-grid">
+                </div>
+        </section>
+    </main>
+
+    <script src="/partner/partner.js"></script>
+</body>
+</html>

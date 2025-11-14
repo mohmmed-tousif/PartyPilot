@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PartyPilot</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <header class="dashboard-header container">
+        <h1>Admin Control</h1>
+        <button class="btn" id="logoutBtn">Logout</button>
+    </header>
+
+    <nav class="dashboard-nav">
+        <div class="container nav-tabs">
+            <div class="nav-tab active" data-target="orders">All Orders</div>
+            <div class="nav-tab" data-target="packages">Manage Packages</div>
+            <div class="nav-tab" data-target="partners">Manage Partners</div>
+        </div>
+    </nav>
+
+    <main class="container dashboard-content">
+        <section id="orders" class="content-section active">
+            <h2>All Orders</h2>
+            <div class="table-wrapper">
+                <table class="data-table" id="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Package</th>
+                            <th>Date</th>
+                            <th>Partner</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="packages" class="content-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2>Manage Packages</h2>
+                <button class="btn btn-primary" id="addPackageBtn">Add New Package</button>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table" id="packages-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="packages-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section id="partners" class="content-section">
+            <h2>Manage Partners</h2>
+             <div class="table-wrapper">
+                <table class="data-table" id="partners-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="partners-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    
+    <div id="mainModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modal-body">
+                </div>
+        </div>
+    </div>
+
+    <script src="/admin/admin.js"></script>
+</body>
+</html>

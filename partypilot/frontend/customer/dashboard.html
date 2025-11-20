@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard - PartyPilot</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
@@ -60,6 +60,67 @@
                 </div>
         </div>
     </div>
+  <div id="paymentModal" class="modal">
+    <div class="modal-content" style="max-width: 450px; text-align: center;">
+        <h2 style="color: var(--primary-color);">Secure Payment</h2>
+        
+        <div style="margin: 1.5rem 0; background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+            <p style="color: var(--text-light); margin-bottom: 0.5rem;">Total Amount:</p>
+            <h1 id="payAmountDisplay" style="font-size: 2.5rem; margin: 0;">$0.00</h1>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; text-align: left;">
+            <label style="font-weight: 600; margin-bottom: 10px; display: block;">Select Method:</label>
+            <div style="display: flex; gap: 20px;">
+                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                    <input type="radio" name="paymentMethod" value="card" checked> Card
+                </label>
+                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                    <input type="radio" name="paymentMethod" value="upi"> UPI
+                </label>
+            </div>
+        </div>
+
+        <div id="payment-card-section" style="text-align: left; margin-bottom: 2rem;">
+            <div class="form-group">
+                <label>Card Number (Mock)</label>
+                <input type="text" value="**** **** **** 4242" disabled style="background: #eee; cursor: not-allowed;">
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <div class="form-group" style="flex:1;">
+                    <label>Expiry</label>
+                    <input type="text" value="12/28" disabled style="background: #eee;">
+                </div>
+                <div class="form-group" style="flex:1;">
+                    <label>CVV</label>
+                    <input type="text" value="***" disabled style="background: #eee;">
+                </div>
+            </div>
+        </div>
+
+        <div id="payment-upi-section" style="text-align: left; margin-bottom: 2rem; display: none;">
+            <div class="form-group">
+                <label for="upiIdInput">Enter UPI ID</label>
+                <input type="text" id="upiIdInput" placeholder="e.g. username@oksbi" style="border-color: var(--primary-color);">
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    Open your phone app to approve the request.
+                </p>
+            </div>
+        </div>
+
+        <button id="confirmPaymentBtn" class="btn btn-success btn-full" style="font-size: 1.1rem;">
+            Pay Now
+        </button>
+        <button id="cancelPaymentBtn" class="btn btn-secondary btn-full" style="margin-top: 10px;">
+            Cancel
+        </button>
+
+        <div id="paymentLoader" style="display: none; margin-top: 20px;">
+            <div class="spinner"></div>
+            <p>Processing Secure Payment...</p>
+        </div>
+    </div>
+</div>
 
     <script src="/customer/customer.js"></script>
 </body>

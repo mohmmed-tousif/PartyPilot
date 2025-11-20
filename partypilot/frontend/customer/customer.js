@@ -198,7 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // 4. Create Order
+   // 4. Create Order with Dummy Payment Flow
     function showOrderModal(pkg) {
+        // 1. Show the Booking Form first
         modalBody.innerHTML = `
             <h2>Book: ${pkg.name}</h2>
             <form id="order-form">
@@ -218,42 +220,119 @@ document.addEventListener('DOMContentLoaded', () => {
                         <option value="100%">Pay 100% Full ($${pkg.price.toFixed(2)})</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full">Confirm Booking</button>
+                <button type="submit" class="btn btn-primary btn-full">Proceed to Payment</button>
             </form>
         `;
         showModal();
         
-        document.getElementById('order-form').addEventListener('submit', async (e) => {
+        // 2. Handle "Proceed" Click
+        document.getElementById('order-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            // Capture the data, but don't send it yet!
             const paymentType = document.getElementById('paymentType').value;
             const price = pkg.price;
             const paymentAmount = paymentType === '100%' ? price : price * 0.25;
-            
-            const orderData = {
+
+            // Prepare the data object
+            const pendingOrderData = {
                 packageId: document.getElementById('packageId').value,
                 eventDate: document.getElementById('eventDate').value,
                 address: document.getElementById('orderAddress').value,
                 paymentType: paymentType,
                 paymentAmount: paymentAmount
             };
-            
-            const res = await fetch('/api/orders', {
-                method: 'POST',
-                headers: { 
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(orderData)
-            });
-            
-            if (res.ok) {
-                alert('Order placed successfully!');
-                closeModal();
-                document.querySelector('.nav-tab[data-target="my-orders"]').click(); // Switch to My Orders
-            } else {
-                alert('Failed to place order.');
-            }
+
+            // Close Booking Modal & Open Payment Modal
+            closeModal(); 
+            openPaymentModal(pendingOrderData);
         });
+    }
+
+    // --- NEW: Payment Modal Logic ---
+    function openPaymentModal(orderData) {
+        const paymentModal = document.getElementById('paymentModal');
+        const amountDisplay = document.getElementById('payAmountDisplay');
+        const payBtn = document.getElementById('confirmPaymentBtn');
+        const cancelBtn = document.getElementById('cancelPaymentBtn');
+        const loader = document.getElementById('paymentLoader');
+        
+        // Elements for toggling
+        const cardSection = document.getElementById('payment-card-section');
+        const upiSection = document.getElementById('payment-upi-section');
+        const radios = document.getElementsByName('paymentMethod');
+        const upiInput = document.getElementById('upiIdInput');
+
+        // Reset UI State
+        paymentModal.style.display = 'block';
+        amountDisplay.innerText = `$${orderData.paymentAmount.toFixed(2)}`;
+        payBtn.style.display = 'block';
+        cancelBtn.style.display = 'block';
+        loader.style.display = 'none';
+        
+        // Reset to Card default
+        radios[0].checked = true;
+        cardSection.style.display = 'block';
+        upiSection.style.display = 'none';
+        upiInput.value = ''; // Clear previous input
+
+        // --- Toggle Logic ---
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'upi') {
+                    cardSection.style.display = 'none';
+                    upiSection.style.display = 'block';
+                } else {
+                    cardSection.style.display = 'block';
+                    upiSection.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle Cancel
+        cancelBtn.onclick = () => {
+            paymentModal.style.display = 'none';
+        };
+
+        // Handle Pay Now
+        payBtn.onclick = async () => {
+            // Simple Validation for UPI
+            if (upiSection.style.display === 'block' && upiInput.value.trim() === '') {
+                alert('Please enter a valid UPI ID');
+                return;
+            }
+
+            // 1. Show Loader
+            payBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            loader.style.display = 'block';
+
+            // 2. Fake Delay (2 seconds)
+            setTimeout(async () => {
+                try {
+                    // 3. Send to backend
+                    const res = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: { 
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData)
+                    });
+                    
+                    if (res.ok) {
+                        alert('Payment Successful! Order Placed.');
+                        paymentModal.style.display = 'none';
+                        document.querySelector('.nav-tab[data-target="my-orders"]').click();
+                    } else {
+                        throw new Error('API Error');
+                    }
+                } catch (err) {
+                    alert('Payment Failed. Please try again.');
+                    paymentModal.style.display = 'none';
+                }
+            }, 2000);
+        };
     }
 
     // Initial Load

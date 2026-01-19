@@ -4,15 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard - PartyPilot</title>
-    <link rel="stylesheet" href="/assets/css/style.css?v=2">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
-    <header class="dashboard-header container">
-        <h1>My Dashboard</h1>
-        <button class="btn" id="logoutBtn">Logout</button>
+    <header class="modern-header">
+        <div class="container">
+            <a href="/customer/dashboard.html" class="logo-modern">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" fill="url(#gradient1)"/>
+                    <path d="M20 10L25 18H15L20 10Z" fill="white"/>
+                    <circle cx="20" cy="25" r="5" fill="white"/>
+                    <defs><linearGradient id="gradient1" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#FF6B9D"/><stop offset="1" stop-color="#C06FFF"/></linearGradient></defs>
+                </svg>
+                <span>PartyPilot</span>
+            </a>
+            <button class="btn-gradient" id="logoutBtn">Logout</button>
+        </div>
     </header>
+    <div style="height: 80px;"></div>
 
     <nav class="dashboard-nav">
         <div class="container nav-tabs">
@@ -24,7 +35,29 @@
 
     <main class="container dashboard-content">
         <section id="packages" class="content-section active">
-            <h2>Our Packages</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
+                <h2>Our Packages</h2>
+                <div style="display:flex; gap:1rem; align-items:center;">
+                    <div class="search-bar">
+                        <input type="search" placeholder="Search packages, e.g., birthday" id="packageSearch" />
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="Kids">Kids</option>
+                            <option value="Weddings">Weddings</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="Casual">Casual</option>
+                            <option value="Festival">Festival</option>
+                            <option value="Themed">Themed</option>
+                        </select>
+                        <select id="sortBy">
+                            <option value="newest">Newest</option>
+                            <option value="priceAsc">Price (Low → High)</option>
+                            <option value="priceDesc">Price (High → Low)</option>
+                            <option value="rating">Top Rated</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="dashboard-grid" id="packages-grid">
                 </div>
         </section>
@@ -60,67 +93,6 @@
                 </div>
         </div>
     </div>
-  <div id="paymentModal" class="modal">
-    <div class="modal-content" style="max-width: 450px; text-align: center;">
-        <h2 style="color: var(--primary-color);">Secure Payment</h2>
-        
-        <div style="margin: 1.5rem 0; background: #f8f9fa; padding: 1rem; border-radius: 8px;">
-            <p style="color: var(--text-light); margin-bottom: 0.5rem;">Total Amount:</p>
-            <h1 id="payAmountDisplay" style="font-size: 2.5rem; margin: 0;">$0.00</h1>
-        </div>
-
-        <div style="margin-bottom: 1.5rem; text-align: left;">
-            <label style="font-weight: 600; margin-bottom: 10px; display: block;">Select Method:</label>
-            <div style="display: flex; gap: 20px;">
-                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                    <input type="radio" name="paymentMethod" value="card" checked> Card
-                </label>
-                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                    <input type="radio" name="paymentMethod" value="upi"> UPI
-                </label>
-            </div>
-        </div>
-
-        <div id="payment-card-section" style="text-align: left; margin-bottom: 2rem;">
-            <div class="form-group">
-                <label>Card Number (Mock)</label>
-                <input type="text" value="**** **** **** 4242" disabled style="background: #eee; cursor: not-allowed;">
-            </div>
-            <div style="display: flex; gap: 1rem;">
-                <div class="form-group" style="flex:1;">
-                    <label>Expiry</label>
-                    <input type="text" value="12/28" disabled style="background: #eee;">
-                </div>
-                <div class="form-group" style="flex:1;">
-                    <label>CVV</label>
-                    <input type="text" value="***" disabled style="background: #eee;">
-                </div>
-            </div>
-        </div>
-
-        <div id="payment-upi-section" style="text-align: left; margin-bottom: 2rem; display: none;">
-            <div class="form-group">
-                <label for="upiIdInput">Enter UPI ID</label>
-                <input type="text" id="upiIdInput" placeholder="e.g. username@oksbi" style="border-color: var(--primary-color);">
-                <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
-                    Open your phone app to approve the request.
-                </p>
-            </div>
-        </div>
-
-        <button id="confirmPaymentBtn" class="btn btn-success btn-full" style="font-size: 1.1rem;">
-            Pay Now
-        </button>
-        <button id="cancelPaymentBtn" class="btn btn-secondary btn-full" style="margin-top: 10px;">
-            Cancel
-        </button>
-
-        <div id="paymentLoader" style="display: none; margin-top: 20px;">
-            <div class="spinner"></div>
-            <p>Processing Secure Payment...</p>
-        </div>
-    </div>
-</div>
 
     <script src="/customer/customer.js"></script>
 </body>

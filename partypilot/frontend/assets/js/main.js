@@ -75,6 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const customerLoginBtn = document.getElementById('customerLoginBtn');
     const partnerLoginBtn = document.getElementById('partnerLoginBtn');
     const browsePackagesBtn = document.getElementById('browsePackagesBtn');
+    const viewAllPackagesBtn = document.getElementById('viewAllPackagesBtn');
+    const ctaGetStartedBtn = document.getElementById('ctaGetStartedBtn');
     
     // Check if already logged in
     const token = localStorage.getItem('token');
@@ -100,6 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
     customerLoginBtn.onclick = showCustomerLogin;
     partnerLoginBtn.onclick = showPartnerLogin;
     browsePackagesBtn.onclick = showCustomerLogin; // Must log in to browse
+    if (viewAllPackagesBtn) viewAllPackagesBtn.onclick = showCustomerLogin;
+    if (ctaGetStartedBtn) ctaGetStartedBtn.onclick = showCustomerLogin;
 
     // --- Auth Functions ---
     

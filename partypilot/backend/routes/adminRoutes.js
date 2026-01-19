@@ -8,7 +8,9 @@ const {
   deletePackage,
   getPartners,
   approvePartner,
-  getAllOrders
+  getAllOrders,
+  assignPartner,
+  getDashboardStats
 } = require('../controllers/adminController');
 const { protect } = require('../middleware/authMiddleware');
 const { admin } = require('../middleware/roleMiddleware');
@@ -33,5 +35,11 @@ router.route('/partners/:id/approve')
 // Order routes
 router.route('/orders')
   .get(getAllOrders);
+
+// Dashboard stats
+router.route('/dashboard/stats').get(getDashboardStats);
+
+router.route('/orders/:id/assign')
+  .put(assignPartner);
 
 module.exports = router;

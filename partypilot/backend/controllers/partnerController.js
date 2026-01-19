@@ -8,7 +8,7 @@ exports.getNewOrders = async (req, res) => {
   try {
     // Find orders that are 'Received' and not yet assigned
     const orders = await Order.find({ status: 'Received', assignedPartner: null })
-      .populate('package', 'name price')
+      .populate('package', 'name price image images')
       .populate('customer', 'fullName address')
       .sort({ eventDate: 1 });
     res.json(orders);
@@ -22,12 +22,16 @@ exports.getNewOrders = async (req, res) => {
 // @access  Private (Partner)
 exports.getMyAssignedOrders = async (req, res) => {
   try {
+    console.log('Fetching orders for partner:', req.user.id);
     const orders = await Order.find({ assignedPartner: req.user.id })
-      .populate('package', 'name')
+      .populate('package', 'name image images')
       .populate('customer', 'fullName address phone')
       .sort({ eventDate: 1 });
+    console.log(`Found ${orders.length} orders for partner ${req.user.id}`);
+    console.log('Orders:', orders.map(o => ({ id: o._id, status: o.status, package: o.package?.name })));
     res.json(orders);
   } catch (error) {
+    console.error('Error fetching partner orders:', error);
     res.status(500).json({ message: error.message });
   }
 };

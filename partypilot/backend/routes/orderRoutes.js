@@ -6,6 +6,7 @@ const {
   getMyOrders,
   getOrderById
 } = require('../controllers/orderController');
+const { ratePackage } = require('../controllers/adminController');
 const { protect } = require('../middleware/authMiddleware');
 const { customer } = require('../middleware/roleMiddleware');
 
@@ -21,5 +22,9 @@ router.route('/myorders')
 
 router.route('/:id')
   .get(protect, getOrderById); // Customer, Partner, or Admin can get order
+
+// Customers can rate packages
+router.route('/packages/:id/rate')
+  .post(protect, customer, ratePackage);
 
 module.exports = router;

@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tbody = document.getElementById('orders-table-body');
         tbody.innerHTML = '';
         orders.forEach(order => {
+            const assignBtn = !order.assignedPartner ? `<button class="btn btn-primary btn-sm assign-btn" data-order-id="${order._id}">Assign Partner</button>` : '';
             tbody.innerHTML += `
                 <tr>
                     <td>${order._id.slice(-6)}</td>
@@ -122,8 +123,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${new Date(order.eventDate).toLocaleDateString()}</td>
                     <td>${order.assignedPartner?.companyName || '<i>Unassigned</i>'}</td>
                     <td><span class="order-status status-${order.status.replace(' ', '-')}">${order.status}</span></td>
+                    <td>${assignBtn}</td>
                 </tr>
             `;
+        });
+        
+        // Add event listeners for assign buttons
+        document.querySelectorAll('.assign-btn').forEach(btn => {
+            btn.onclick = async (e) => {
+                const orderId = e.target.dataset.orderId;
+                await showAssignPartnerModal(orderId);
+            };
+        });
+    }
+    
+    async function showAssignPartnerModal(orderId) {
+        const partnersRes = await apiFetch('/api/admin/partners');
+        const partners = await partnersRes.json();
+        const approvedPartners = partners.filter(p => p.isApproved);
+        
+        if (approvedPartners.length === 0) {
+            alert('No approved partners available');
+            return;
+        }
+        
+        modalBody.innerHTML = `
+            <h2>Assign Partner to Order</h2>
+            <form id="assign-partner-form">
+                <div class="form-group">
+                    <label for="partnerSelect">Select Partner</label>
+                    <select id="partnerSelect" required>
+                        <option value="">-- Select Partner --</option>
+                        ${approvedPartners.map(p => `<option value="${p._id}">${p.companyName} (${p.email})</option>`).join('')}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Assign Partner</button>
+            </form>
+        `;
+        showModal();
+        
+        document.getElementById('assign-partner-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const partnerId = document.getElementById('partnerSelect').value;
+            
+            const res = await apiFetch(`/api/admin/orders/${orderId}/assign`, {
+                method: 'PUT',
+                body: JSON.stringify({ partnerId })
+            });
+            
+            if (res.ok) {
+                alert('Partner assigned successfully!');
+                closeModal();
+                fetchAllOrders();
+            } else {
+                const error = await res.json();
+                alert('Failed to assign partner: ' + (error.message || 'Unknown error'));
+            }
         });
     }
 
@@ -158,17 +213,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Section 3: Manage Packages ---
     document.getElementById('addPackageBtn').onclick = () => showPackageForm();
-    
+    const adminPackageSearch = document.getElementById('adminPackageSearch');
+    adminPackageSearch?.addEventListener('input', () => fetchAllPackages());
+
     async function fetchAllPackages() {
-        const res = await apiFetch('/api/admin/packages');
+        const q = adminPackageSearch?.value || '';
+        const url = `/api/admin/packages?q=${encodeURIComponent(q)}&limit=200`;
+        const res = await apiFetch(url);
         const packages = await res.json();
         const tbody = document.getElementById('packages-table-body');
         tbody.innerHTML = '';
         packages.forEach(p => {
+            const imageUrl = (p.images && p.images.length > 0) ? p.images[0] : (p.image || 'https://via.placeholder.com/400x300');
             tbody.innerHTML += `
                 <tr>
-                    <td>${p.name}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <img src="${imageUrl}" alt="${p.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);" onerror="this.src='https://via.placeholder.com/60x60'">
+                            <span>${p.name}</span>
+                        </div>
+                    </td>
                     <td>$${p.price}</td>
+                    <td>${p.rating || 0} (${p.ratingCount || 0})</td>
                     <td>${p.isActive ? 'Yes' : 'No'}</td>
                     <td>
                         <button class="btn btn-secondary btn-sm edit-pkg-btn" data-id="${p._id}">Edit</button>
@@ -195,6 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function showPackageForm(pkg = null) {
         const isEdit = pkg !== null;
+        const currentImage = isEdit ? ((pkg.images && pkg.images.length > 0) ? pkg.images[0] : (pkg.image || '')) : '';
+        const currentImages = isEdit ? (pkg.images && pkg.images.length > 0 ? pkg.images.join(', ') : (pkg.image || '')) : '';
+        
         modalBody.innerHTML = `
             <h2>${isEdit ? 'Edit' : 'Add'} Package</h2>
             <form id="package-form">
@@ -216,8 +285,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <input type="text" id="pkgFeatures" value="${isEdit ? pkg.features.join(', ') : ''}">
                 </div>
                 <div class="form-group">
-                    <label for="pkgImage">Image URL</label>
-                    <input type="text" id="pkgImage" value="${isEdit ? pkg.image : ''}">
+                    <label for="pkgImages">Image URLs (comma-separated for multiple images)</label>
+                    <input type="text" id="pkgImages" value="${currentImages}" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg">
+                    <small style="color: var(--text-light); font-size: 0.9rem;">Enter one or more image URLs separated by commas</small>
+                </div>
+                <div class="form-group" id="imagePreviewContainer" style="display: ${currentImage ? 'block' : 'none'};">
+                    <label>Image Preview</label>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                        <img id="imagePreview" src="${currentImage}" alt="Preview" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);" onerror="this.style.display='none'">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="pkgActive">Is Active?</label>
@@ -231,17 +307,43 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         showModal();
         
+        // Add image preview functionality
+        const imagesInput = document.getElementById('pkgImages');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        imagesInput.addEventListener('input', function() {
+            const urls = this.value.split(',').map(url => url.trim()).filter(url => url);
+            if (urls.length > 0) {
+                const firstUrl = urls[0];
+                imagePreview.src = firstUrl;
+                previewContainer.style.display = 'block';
+                imagePreview.onerror = function() {
+                    this.style.display = 'none';
+                };
+                imagePreview.onload = function() {
+                    this.style.display = 'block';
+                };
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        });
+        
         document.getElementById('package-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const url = isEdit ? `/api/admin/packages/${pkg._id}` : '/api/admin/packages';
             const method = isEdit ? 'PUT' : 'POST';
             
+            const imagesInput = document.getElementById('pkgImages').value;
+            const images = imagesInput.split(',').map(url => url.trim()).filter(url => url);
+            
             const body = {
                 name: document.getElementById('pkgName').value,
                 description: document.getElementById('pkgDesc').value,
                 price: parseFloat(document.getElementById('pkgPrice').value),
-                features: document.getElementById('pkgFeatures').value.split(',').map(f => f.trim()),
-                image: document.getElementById('pkgImage').value,
+                features: document.getElementById('pkgFeatures').value.split(',').map(f => f.trim()).filter(f => f),
+                images: images.length > 0 ? images : undefined,
+                image: images.length > 0 ? images[0] : undefined, // Keep for backward compatibility
                 isActive: document.getElementById('pkgActive').value === 'true'
             };
             
@@ -253,4 +355,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial Load
     fetchAllOrders();
+    fetchAllPackages();
+    fetchAllPartners();
+    fetchStats();
+
+    // --- Dashboard Stats ---
+    async function fetchStats() {
+        const res = await apiFetch('/api/admin/dashboard/stats');
+        if (!res.ok) return;
+        const s = await res.json();
+        document.getElementById('statPackages').innerText = s.totalPackages;
+        document.getElementById('statOrders').innerText = s.totalOrders;
+        document.getElementById('statPartners').innerText = s.totalPartners;
+        document.getElementById('statPending').innerText = s.pendingPartners;
+
+        // Draw charts (requires Chart.js)
+        try {
+            const approved = (s.totalPartners || 0) - (s.pendingPartners || 0);
+            const pending = s.pendingPartners || 0;
+            const partnersCtx = document.getElementById('partnersChart');
+            if (partnersCtx) {
+                new Chart(partnersCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Approved', 'Pending'],
+                        datasets: [{
+                            data: [approved, pending],
+                            backgroundColor: ['#4caf50', '#ffc107']
+                        }]
+                    },
+                    options: { plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+
+            const catalogCtx = document.getElementById('catalogOrdersChart');
+            if (catalogCtx) {
+                new Chart(catalogCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Total Packages', 'Total Orders'],
+                        datasets: [{
+                            label: 'Count',
+                            data: [s.totalPackages || 0, s.totalOrders || 0],
+                            backgroundColor: ['#6a11cb', '#2575fc']
+                        }]
+                    },
+                    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+            }
+        } catch (e) { console.warn('Chart render failed', e); }
+    }
 });

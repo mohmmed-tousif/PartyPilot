@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
   phone: { type: String, required: true, unique: true },
   fullName: { type: String },
   address: { type: String },
+  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Package' }],
   otp: { type: String },
   otpExpires: { type: Date },
   role: { type: String, default: 'customer' },

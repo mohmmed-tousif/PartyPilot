@@ -2,6 +2,8 @@
 const User = require('../models/User');
 const Partner = require('../models/Partner');
 const { generateToken } = require('../middleware/authMiddleware');
+const { sendOTPEmail } = require('../utils/emailService');
+const { sendSMSOTP } = require('../utils/smsService');
 
 // --- Customer Auth ---
 exports.registerCustomer = async (req, res) => {
@@ -11,11 +13,16 @@ exports.registerCustomer = async (req, res) => {
   }
 
   try {
-    const otp = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit OTP
+    // Generate random 4-digit OTP
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
     const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
     
     // In a real app, you'd use Twilio/SNS to send this OTP
-    console.log(`Mock OTP for ${phone} is: ${otp}`);
+    console.log(`\n🔐 ===== OTP GENERATED =====`);
+    console.log(`📱 Phone: ${phone}`);
+    console.log(`🔑 OTP: ${otp}`);
+    console.log(`⏰ Expires in 10 minutes`);
+    console.log(`=============================\n`);
 
     let user = await User.findOne({ phone });
 
@@ -148,4 +155,56 @@ exports.loginAdmin = async (req, res) => {
     } else {
         res.status(401).json({ message: 'Invalid admin credentials' });
     }
+};
+
+// --- Customer favorites ---
+exports.getFavorites = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate('favorites');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user.favorites || []);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.addFavorite = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const pkgId = req.params.id;
+    if (!user.favorites) user.favorites = [];
+    if (!user.favorites.includes(pkgId)) {
+      user.favorites.push(pkgId);
+      await user.save();
+    }
+    res.json({ message: 'Added to favorites' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.removeFavorite = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const pkgId = req.params.id;
+    user.favorites = (user.favorites || []).filter(id => id.toString() !== pkgId);
+    await user.save();
+    res.json({ message: 'Removed from favorites' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getCustomerProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-otp -otpExpires');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ fullName: user.fullName, address: user.address, phone: user.phone, favorites: user.favorites || [] });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };

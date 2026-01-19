@@ -9,6 +9,11 @@ const PartnerSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   isApproved: { type: Boolean, default: false }, // Admin must approve
   role: { type: String, default: 'partner' },
+  location: {
+    latitude: { type: Number, default: null },
+    longitude: { type: Number, default: null },
+    lastUpdated: { type: Date, default: null }
+  },
   createdAt: { type: Date, default: Date.now }
 });
 

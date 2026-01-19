@@ -9,12 +9,19 @@ const {
   loginPartner,
   loginAdmin
 } = require('../controllers/authController');
-const { protect, admin } = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/authMiddleware');
+const { customer } = require('../middleware/roleMiddleware');
 
 // --- Customer Routes ---
 router.post('/customer/register', registerCustomer);
 router.post('/customer/verify', verifyCustomerOTP);
 router.put('/customer/profile', protect, updateCustomerProfile);
+router.get('/customer/profile', protect, customer, require('../controllers/authController').getCustomerProfile);
+
+// Favorites
+router.get('/customer/favorites', protect, customer, require('../controllers/authController').getFavorites);
+router.post('/customer/favorites/:id', protect, customer, require('../controllers/authController').addFavorite);
+router.delete('/customer/favorites/:id', protect, customer, require('../controllers/authController').removeFavorite);
 
 // --- Partner Routes ---
 router.post('/partner/register', registerPartner);

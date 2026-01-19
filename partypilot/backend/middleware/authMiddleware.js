@@ -5,7 +5,12 @@ const Partner = require('../models/Partner');
 
 // Simple helper to generate token
 const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+  const secret = process.env.JWT_SECRET || 'devsecret';
+  if (!process.env.JWT_SECRET) {
+    // eslint-disable-next-line no-console
+    console.warn('JWT_SECRET not set. Using development default. Set JWT_SECRET in .env for production.');
+  }
+  return jwt.sign({ id, role }, secret, {
     expiresIn: '30d',
   });
 };
@@ -17,7 +22,7 @@ const protect = async (req, res, next) => {
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'devsecret');
 
       // Find user by role
       if (decoded.role === 'customer') {
